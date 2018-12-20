@@ -317,3 +317,38 @@ await device.pressBack();
 
 ### `device.shake()` **iOS Only**
 Simulate shake
+
+### `device.setBiometricEnrollmentStatus(enrollmentStatus)` **iOS Only**
+Turns on or off enrollment into face id or touch id on the iOS simulator.
+
+```js
+await device.setBiometricEnrollmentStatus(true)
+```
+
+### `device.sendFaceMatch()` **iOS Only**
+Sends a successful face id match attempt to the iOS simulator.
+
+```js
+await device.sendFaceMatch()
+```
+
+### `device.sendFaceUnmatch()` **iOS Only**
+Sends an unsuccessful face id match attempt to the iOS simulator.
+
+```js
+await device.sendFaceUnmatch()
+```
+
+### `device.sendFingerMatch()` **iOS Only**
+Sends a successful finger match attempt to the iOS simulator.
+
+```js
+await device.sendFingerMatch()
+```
+
+### `device.sendFingerUnmatch()` **iOS Only**
+Sends an unsuccessful finger match attempt to the iOS simulator.
+
+```js
+await device.sendFingerUnmatch()
+```

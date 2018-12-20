@@ -29,7 +29,7 @@ class Device {
     }
 
     if (params.launchApp) {
-      await this.launchApp({newInstance: true});
+      await this.launchApp({ newInstance: true });
     }
   }
 
@@ -41,7 +41,7 @@ class Device {
     params[launchKey] = payloadFilePath;
   }
 
-  async launchApp(params = {newInstance: false}, bundleId) {
+  async launchApp(params = { newInstance: false }, bundleId) {
     const payloadParams = ['url', 'userNotification', 'userActivity'];
     const hasPayload = this._assertHasSingleParam(payloadParams, params);
 
@@ -80,7 +80,7 @@ class Device {
     const _bundleId = bundleId || this._bundleId;
     if (this._isAppInBackground(params, _bundleId)) {
       if (hasPayload) {
-        await this.deviceDriver.deliverPayload({...params, delayPayload: true});
+        await this.deviceDriver.deliverPayload({ ...params, delayPayload: true });
       }
     }
 
@@ -90,11 +90,11 @@ class Device {
     await this.deviceDriver.waitUntilReady();
     await this.deviceDriver.waitForActive();
 
-    if(params.detoxUserNotificationDataURL) {
+    if (params.detoxUserNotificationDataURL) {
       await this.deviceDriver.cleanupRandomDirectory(params.detoxUserNotificationDataURL);
     }
 
-    if(params.detoxUserActivityDataURL) {
+    if (params.detoxUserActivityDataURL) {
       await this.deviceDriver.cleanupRandomDirectory(params.detoxUserActivityDataURL);
     }
   }
@@ -107,7 +107,7 @@ class Device {
     let paramsCounter = 0;
 
     singleParams.forEach((item) => {
-      if(params[item]) {
+      if (params[item]) {
         paramsCounter += 1;
       }
     });
@@ -218,6 +218,26 @@ class Device {
 
   async pressBack() {
     await this.deviceDriver.pressBack(this._deviceId);
+  }
+
+  async setBiometricEnrollmentStatus(status) {
+    await this.deviceDriver.setBiometricEnrollmentStatus(this._deviceId, status)
+  }
+
+  async sendFaceMatch() {
+    await this.deviceDriver.sendFaceMatch(this._deviceId)
+  }
+
+  async sendFaceUnmatch() {
+    await this.deviceDriver.sendFaceUnmatch(this._deviceId)
+  }
+
+  async sendFingerMatch() {
+    await this.deviceDriver.sendFingerMatch(this._deviceId)
+  }
+
+  async sendFingerUnmatch() {
+    await this.deviceDriver.sendFingerUnmatch(this._deviceId)
   }
 
   _defaultLaunchArgs() {

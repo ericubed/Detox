@@ -248,6 +248,74 @@ Array [
 ]
 `;
 
+exports[`AppleSimUtils sendFaceMatch executes applesimutil with --matchFace 1`] = `
+Array [
+  Array [
+    "applesimutils",
+    Object {
+      "args": "--simulator 30A234FD-2372-4757-A76B-E375C8C43A54 --matchFace",
+    },
+    Object {
+      "successful": "Face match successful",
+      "trying": "Sending a face match...",
+    },
+    1,
+    undefined,
+  ],
+]
+`;
+
+exports[`AppleSimUtils sendFaceUnmatch executes applesimutil with --unmatchFace 1`] = `
+Array [
+  Array [
+    "applesimutils",
+    Object {
+      "args": "--simulator 30A234FD-2372-4757-A76B-E375C8C43A54 --unmatchFace",
+    },
+    Object {
+      "successful": "Face unmatch successful",
+      "trying": "Sending a face unmatch...",
+    },
+    1,
+    undefined,
+  ],
+]
+`;
+
+exports[`AppleSimUtils sendFaceUnmatch executes applesimutil with --unmatchFinger 1`] = `
+Array [
+  Array [
+    "applesimutils",
+    Object {
+      "args": "--simulator 30A234FD-2372-4757-A76B-E375C8C43A54 --unmatchFinger",
+    },
+    Object {
+      "successful": "Finger unmatch successful",
+      "trying": "Sending a finger unmatch...",
+    },
+    1,
+    undefined,
+  ],
+]
+`;
+
+exports[`AppleSimUtils sendFingerMatch executes applesimutil with --matchFinger 1`] = `
+Array [
+  Array [
+    "applesimutils",
+    Object {
+      "args": "--simulator 30A234FD-2372-4757-A76B-E375C8C43A54 --matchFinger",
+    },
+    Object {
+      "successful": "Finger match successful",
+      "trying": "Sending a finger match...",
+    },
+    1,
+    undefined,
+  ],
+]
+`;
+
 exports[`AppleSimUtils sendToHome calls xcrun 1`] = `
 Array [
   Array [
@@ -257,6 +325,40 @@ Array [
     },
     Object {},
     10,
+  ],
+]
+`;
+
+exports[`AppleSimUtils setBiometricEnrollmentStatus executes applesimutil with --biometricEnrollment NO 1`] = `
+Array [
+  Array [
+    "applesimutils",
+    Object {
+      "args": "--simulator 30A234FD-2372-4757-A76B-E375C8C43A54 --biometricEnrollment NO",
+    },
+    Object {
+      "successful": "Biometric enrollment status change successful",
+      "trying": "Setting biometric enrollment status to NO ...",
+    },
+    1,
+    undefined,
+  ],
+]
+`;
+
+exports[`AppleSimUtils setBiometricEnrollmentStatus executes applesimutil with --biometricEnrollment YES 1`] = `
+Array [
+  Array [
+    "applesimutils",
+    Object {
+      "args": "--simulator 30A234FD-2372-4757-A76B-E375C8C43A54 --biometricEnrollment YES",
+    },
+    Object {
+      "successful": "Biometric enrollment status change successful",
+      "trying": "Setting biometric enrollment status to YES ...",
+    },
+    1,
+    undefined,
   ],
 ]
 `;

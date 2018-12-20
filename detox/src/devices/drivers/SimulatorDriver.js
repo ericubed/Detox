@@ -85,9 +85,9 @@ class SimulatorDriver extends IosDriver {
   }
 
   async launchApp(deviceId, bundleId, launchArgs, languageAndLocale) {
-    await this.emitter.emit('beforeLaunchApp', {bundleId, deviceId, launchArgs});
+    await this.emitter.emit('beforeLaunchApp', { bundleId, deviceId, launchArgs });
     const pid = await this._applesimutils.launch(deviceId, bundleId, launchArgs, languageAndLocale);
-    await this.emitter.emit('launchApp', {bundleId, deviceId, launchArgs, pid});
+    await this.emitter.emit('launchApp', { bundleId, deviceId, launchArgs, pid });
 
     return pid;
   }
@@ -139,6 +139,26 @@ class SimulatorDriver extends IosDriver {
 
   async waitForBackground() {
     return await this.client.waitForBackground();
+  }
+
+  async setBiometricEnrollmentStatus(deviceId, enrollmentStatus) {
+    return this._applesimutils.setBiometricEnrollmentStatus(deviceId, enrollmentStatus);
+  }
+
+  async sendFaceMatch(deviceId) {
+    return this._applesimutils.sendFaceMatch(deviceId);
+  }
+
+  async sendFaceUnmatch(deviceId) {
+    return this._applesimutils.sendFaceUnmatch(deviceId);
+  }
+
+  async sendFingerMatch(deviceId) {
+    return this._applesimutils.sendFingerMatch(deviceId);
+  }
+
+  async sendFingerUnmatch(deviceId) {
+    return this._applesimutils.sendFingerUnmatch(deviceId);
   }
 }
 

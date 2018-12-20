@@ -39,7 +39,7 @@ class AppleSimUtils {
       os = deviceInfo.newestRuntime.version;
     }
 
-    const response = await this._execAppleSimUtils({ args: `--list --byType "${type}" --byOS "${os}"`}, statusLogs, 1);
+    const response = await this._execAppleSimUtils({ args: `--list --byType "${type}" --byOS "${os}"` }, statusLogs, 1);
     const parsed = this._parseResponseFromAppleSimUtils(response);
     const udids = _.map(parsed, 'udid');
     if (!udids || !udids.length || !udids[0]) {
@@ -50,7 +50,7 @@ class AppleSimUtils {
   }
 
   async findDeviceByUDID(udid) {
-    const response = await this._execAppleSimUtils({args: `--list --byId "${udid}"`}, undefined, 1);
+    const response = await this._execAppleSimUtils({ args: `--list --byId "${udid}"` }, undefined, 1);
     const parsed = this._parseResponseFromAppleSimUtils(response);
     const device = _.find(parsed, (device) => _.isEqual(device.udid, udid));
     if (!device) {
@@ -85,7 +85,7 @@ class AppleSimUtils {
     const result = await this._execSimctl({ cmd: `list -j` });
     const stdout = _.get(result, 'stdout');
     const output = JSON.parse(stdout);
-    const deviceType = _.filter(output.devicetypes, { 'name': name})[0];
+    const deviceType = _.filter(output.devicetypes, { 'name': name })[0];
     const newestRuntime = _.maxBy(output.runtimes, r => Number(r.version));
     return { deviceType, newestRuntime };
   }
@@ -93,7 +93,7 @@ class AppleSimUtils {
     const deviceInfo = await this.deviceTypeAndNewestRuntimeFor(name);
 
     if (deviceInfo.newestRuntime) {
-      const result = await this._execSimctl({cmd: `create "${name}-Detox" "${deviceInfo.deviceType.identifier}" "${deviceInfo.newestRuntime.identifier}"`});
+      const result = await this._execSimctl({ cmd: `create "${name}-Detox" "${deviceInfo.deviceType.identifier}" "${deviceInfo.newestRuntime.identifier}"` });
       const udid = _.get(result, 'stdout').trim();
       return udid;
     } else {
@@ -199,6 +199,63 @@ class AppleSimUtils {
     return exec.spawnAndLog('/usr/bin/xcrun', ['simctl', 'io', udid, 'recordVideo', destination]);
   }
 
+  async setBiometricEnrollmentStatus(udid, status) {
+    const statusString = status ? 'YES' : 'NO'
+
+    const statusLogs = {
+      trying: `Setting biometric enrollment status to ${statusString} ...`,
+      successful: 'Biometric enrollment status change successful'
+    };
+
+    await this._execAppleSimUtils({
+      args: `--simulator ${udid} --biometricEnrollment ${statusString}`
+    }, statusLogs, 1);
+  }
+
+  async sendFaceMatch(udid) {
+    const statusLogs = {
+      trying: `Sending a face match...`,
+      successful: 'Face match successful'
+    };
+
+    await this._execAppleSimUtils({
+      args: `--simulator ${udid} --matchFace`
+    }, statusLogs, 1);
+  }
+
+  async sendFaceUnmatch(udid) {
+    const statusLogs = {
+      trying: `Sending a face unmatch...`,
+      successful: 'Face unmatch successful'
+    };
+
+    await this._execAppleSimUtils({
+      args: `--simulator ${udid} --unmatchFace`
+    }, statusLogs, 1);
+  }
+
+  async sendFingerMatch(udid) {
+    const statusLogs = {
+      trying: `Sending a finger match...`,
+      successful: 'Finger match successful'
+    };
+
+    await this._execAppleSimUtils({
+      args: `--simulator ${udid} --matchFinger`
+    }, statusLogs, 1);
+  }
+
+  async sendFingerUnmatch(udid) {
+    const statusLogs = {
+      trying: `Sending a finger unmatch...`,
+      successful: 'Finger unmatch successful'
+    };
+
+    await this._execAppleSimUtils({
+      args: `--simulator ${udid} --unmatchFinger`
+    }, statusLogs, 1);
+  }
+
   async _execAppleSimUtils(options, statusLogs, retries, interval) {
     const bin = `applesimutils`;
     return await exec.execWithRetriesAndLogs(bin, options, statusLogs, retries, interval);
@@ -254,7 +311,7 @@ class AppleSimUtils {
     const statusLogs = {
       trying: `Launching ${bundleId}...`,
       successful: `${bundleId} launched. The stdout and stderr logs were recreated, you can watch them with:\n` +
-      `        tail -F ${logsInfo.absJoined}`
+        `        tail -F ${logsInfo.absJoined}`
     };
 
     let dylibs = `${frameworkPath}/Detox`;
@@ -267,13 +324,13 @@ class AppleSimUtils {
       `/usr/bin/xcrun simctl launch --stdout=${logsInfo.simStdout} --stderr=${logsInfo.simStderr} ` +
       `${udid} ${bundleId} --args ${args}`;
 
-      if (!!languageAndLocale && !!languageAndLocale.language) {
-        launchBin += ` -AppleLanguages "(${languageAndLocale.language})"`;
-      }
-  
-      if (!!languageAndLocale && !!languageAndLocale.locale) {
-        launchBin += ` -AppleLocale ${languageAndLocale.locale}`;
-      }
+    if (!!languageAndLocale && !!languageAndLocale.language) {
+      launchBin += ` -AppleLanguages "(${languageAndLocale.language})"`;
+    }
+
+    if (!!languageAndLocale && !!languageAndLocale.locale) {
+      launchBin += ` -AppleLocale ${languageAndLocale.locale}`;
+    }
 
     return await exec.execWithRetriesAndLogs(launchBin, undefined, statusLogs, 1);
   }

@@ -134,7 +134,7 @@ class DeviceDriverBase {
   }
 
   cleanupRandomDirectory(fileOrDir) {
-    if(path.basename(fileOrDir).startsWith('detoxrand-')) {
+    if (path.basename(fileOrDir).startsWith('detoxrand-')) {
       fs.removeSync(fileOrDir);
     }
   }
@@ -163,6 +163,26 @@ class DeviceDriverBase {
   }
 
   async pressBack() {
+    return await Promise.resolve('');
+  }
+
+  async setBiometricEnrollmentStatus(enrollmentStatus) {
+    return await Promise.resolve('');
+  }
+
+  async sendFaceMatch() {
+    return await Promise.resolve('');
+  }
+
+  async sendFaceUnmatch() {
+    return await Promise.resolve('');
+  }
+
+  async sendFingerMatch() {
+    return await Promise.resolve('');
+  }
+
+  async sendFingerUnmatch() {
     return await Promise.resolve('');
   }
 

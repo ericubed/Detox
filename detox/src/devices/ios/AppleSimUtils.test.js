@@ -31,7 +31,7 @@ describe('AppleSimUtils', () => {
   it(`appleSimUtils setPermissions`, async () => {
     uut.setPermissions(bundleId, simUdid, {
       permissions:
-      { calendar: "YES" }
+        { calendar: "YES" }
     });
     expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
   });
@@ -40,38 +40,39 @@ describe('AppleSimUtils', () => {
 
     it('return multiple devices', async () => {
       exec.execWithRetriesAndLogs
-          .mockReturnValueOnce(Promise.resolve({
-            stdout: JSON.stringify(simctlList)}))
-          .mockReturnValueOnce(Promise.resolve({
-        stdout: JSON.stringify([
-          {
-            "state": "Shutdown",
-            "availability": "(available)",
-            "name": "iPhone 6",
-            "udid": "the uuid1",
-            "os": {
-              "version": "10.3.1",
+        .mockReturnValueOnce(Promise.resolve({
+          stdout: JSON.stringify(simctlList)
+        }))
+        .mockReturnValueOnce(Promise.resolve({
+          stdout: JSON.stringify([
+            {
+              "state": "Shutdown",
               "availability": "(available)",
-              "name": "iOS 10.3",
-              "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
-              "buildversion": "14E8301"
-            }
-          },
-          {
-            "state": "Shutdown",
-            "availability": "(available)",
-            "name": "iPhone 6",
-            "udid": "the uuid2",
-            "os": {
-              "version": "10.3.1",
+              "name": "iPhone 6",
+              "udid": "the uuid1",
+              "os": {
+                "version": "10.3.1",
+                "availability": "(available)",
+                "name": "iOS 10.3",
+                "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
+                "buildversion": "14E8301"
+              }
+            },
+            {
+              "state": "Shutdown",
               "availability": "(available)",
-              "name": "iOS 10.3",
-              "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
-              "buildversion": "14E8301"
+              "name": "iPhone 6",
+              "udid": "the uuid2",
+              "os": {
+                "version": "10.3.1",
+                "availability": "(available)",
+                "name": "iOS 10.3",
+                "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
+                "buildversion": "14E8301"
+              }
             }
-          }
-        ])
-      }));
+          ])
+        }));
       const result = await uut.findDevicesUDID('iPhone 7');
       expect(result).toEqual(['the uuid1', 'the uuid2']);
     });
@@ -89,50 +90,52 @@ describe('AppleSimUtils', () => {
 
     it('returns udid from found device', async () => {
       exec.execWithRetriesAndLogs
-          .mockReturnValueOnce(Promise.resolve({
-            stdout: JSON.stringify(simctlList)}))
-          .mockReturnValueOnce(Promise.resolve({
-            stdout: JSON.stringify([
-              {
-                "state": "Shutdown",
+        .mockReturnValueOnce(Promise.resolve({
+          stdout: JSON.stringify(simctlList)
+        }))
+        .mockReturnValueOnce(Promise.resolve({
+          stdout: JSON.stringify([
+            {
+              "state": "Shutdown",
+              "availability": "(available)",
+              "name": "iPhone 6",
+              "udid": "the uuid",
+              "os": {
+                "version": "10.3.1",
                 "availability": "(available)",
-                "name": "iPhone 6",
-                "udid": "the uuid",
-                "os": {
-                  "version": "10.3.1",
-                  "availability": "(available)",
-                  "name": "iOS 10.3",
-                  "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
-                  "buildversion": "14E8301"
-                }
+                "name": "iOS 10.3",
+                "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
+                "buildversion": "14E8301"
               }
-            ])
-          }));
+            }
+          ])
+        }));
       const result = await uut.findDeviceUDID('iPhone 7');
       expect(result).toEqual('the uuid');
     });
 
     it('handles stderr as if stdout', async () => {
       exec.execWithRetriesAndLogs
-          .mockReturnValueOnce(Promise.resolve({
-            stdout: JSON.stringify(simctlList)}))
-          .mockReturnValueOnce(Promise.resolve({
-        stderr: JSON.stringify([
-          {
-            "state": "Shutdown",
-            "availability": "(available)",
-            "name": "iPhone 6",
-            "udid": "the uuid",
-            "os": {
-              "version": "10.3.1",
+        .mockReturnValueOnce(Promise.resolve({
+          stdout: JSON.stringify(simctlList)
+        }))
+        .mockReturnValueOnce(Promise.resolve({
+          stderr: JSON.stringify([
+            {
+              "state": "Shutdown",
               "availability": "(available)",
-              "name": "iOS 10.3",
-              "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
-              "buildversion": "14E8301"
+              "name": "iPhone 6",
+              "udid": "the uuid",
+              "os": {
+                "version": "10.3.1",
+                "availability": "(available)",
+                "name": "iOS 10.3",
+                "identifier": "com.apple.CoreSimulator.SimRuntime.iOS-10-3",
+                "buildversion": "14E8301"
+              }
             }
-          }
-        ])
-      }));
+          ])
+        }));
       const result = await uut.findDeviceUDID('iPhone 7');
       expect(result).toEqual('the uuid');
     });
@@ -263,14 +266,14 @@ describe('AppleSimUtils', () => {
   describe('create', () => {
 
     it('calls xcrun to get a list of runtimes/devicetypes/devices', async () => {
-      exec.execWithRetriesAndLogs.mockReturnValue(Promise.resolve({stdout: JSON.stringify(simctlList)}));
+      exec.execWithRetriesAndLogs.mockReturnValue(Promise.resolve({ stdout: JSON.stringify(simctlList) }));
 
       const created = await uut.create('iPhone X');
       expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
     });
 
     it('errors when there is no runtime available', async () => {
-      exec.execWithRetriesAndLogs.mockReturnValueOnce(Promise.resolve({stdout: "{}"}));
+      exec.execWithRetriesAndLogs.mockReturnValueOnce(Promise.resolve({ stdout: "{}" }));
       try {
         await uut.create('iPhone 7 Plus');
         fail(`should throw`);
@@ -282,7 +285,7 @@ describe('AppleSimUtils', () => {
 
 
     xit('creates using the newest runtime version', async () => {
-      exec.execWithRetriesAndLogs.mockReturnValueOnce(Promise.resolve({stdout: JSON.stringify(simctlList)}));
+      exec.execWithRetriesAndLogs.mockReturnValueOnce(Promise.resolve({ stdout: JSON.stringify(simctlList) }));
 
       const created = await uut.create('iPhone 7 Plus');
 
@@ -358,13 +361,13 @@ describe('AppleSimUtils', () => {
       } catch (e) {
         fail(`should throw`);
       } finally {
-        if (origEnvVar){
+        if (origEnvVar) {
           // set the env var back to what it used to be
           process.env.SIMCTL_CHILD_DYLD_INSERT_LIBRARIES = origEnvVar;
         } else {
           // env var was never set to begin with, delete it
           delete process.env.SIMCTL_CHILD_DYLD_INSERT_LIBRARIES;
-        } 
+        }
       }
     });
 
@@ -373,7 +376,7 @@ describe('AppleSimUtils', () => {
       const result = await uut.launch('udid', 'theBundleId');
       expect(result).toEqual(12345);
     });
-    
+
   });
 
   describe('sendToHome', () => {
@@ -465,6 +468,52 @@ describe('AppleSimUtils', () => {
 
       expect(exec.spawnAndLog.mock.calls).toMatchSnapshot();
       expect(result).toEqual(childProcessPromise);
+    });
+  });
+
+  describe('setBiometricEnrollmentStatus', () => {
+    it('executes applesimutil with --biometricEnrollment YES', async () => {
+      const udid = '30A234FD-2372-4757-A76B-E375C8C43A54';
+      await uut.setBiometricEnrollmentStatus(udid, true);
+      expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
+    });
+
+    it('executes applesimutil with --biometricEnrollment NO', async () => {
+      const udid = '30A234FD-2372-4757-A76B-E375C8C43A54';
+      await uut.setBiometricEnrollmentStatus(udid, false);
+      expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
+    });
+  });
+
+  describe('sendFaceMatch', () => {
+    it('executes applesimutil with --matchFace', async () => {
+      const udid = '30A234FD-2372-4757-A76B-E375C8C43A54';
+      await uut.sendFaceMatch(udid);
+      expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
+    });
+  });
+
+  describe('sendFaceUnmatch', () => {
+    it('executes applesimutil with --unmatchFace', async () => {
+      const udid = '30A234FD-2372-4757-A76B-E375C8C43A54';
+      await uut.sendFaceUnmatch(udid);
+      expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
+    });
+  });
+
+  describe('sendFingerMatch', () => {
+    it('executes applesimutil with --matchFinger', async () => {
+      const udid = '30A234FD-2372-4757-A76B-E375C8C43A54';
+      await uut.sendFingerMatch(udid);
+      expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
+    });
+  });
+
+  describe('sendFaceUnmatch', () => {
+    it('executes applesimutil with --unmatchFinger', async () => {
+      const udid = '30A234FD-2372-4757-A76B-E375C8C43A54';
+      await uut.sendFingerUnmatch(udid);
+      expect(exec.execWithRetriesAndLogs.mock.calls).toMatchSnapshot();
     });
   });
 });
